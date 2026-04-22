@@ -10,6 +10,11 @@ GET /stats
 
 The service enforces a limit of 5 requests per user per minute.
 
+## Design Decisions
+
+The limiter uses a sliding window approach to avoid burst allowance at window boundaries, which is common in fixed window implementations.
+Mutex-based synchronization was chosen for simplicity and correctness under concurrent access.
+
 ## Run
 
 go run cmd/server/main.go
