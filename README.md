@@ -9,6 +9,7 @@ POST /request
 GET /stats
 
 The service enforces a limit of 5 requests per user per minute.
+Concurrent requests were tested using parallel curl calls to ensure correctness under simultaneous access.
 
 ## Design Decisions
 
