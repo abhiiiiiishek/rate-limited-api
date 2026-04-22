@@ -15,9 +15,10 @@ Concurrent requests were tested using parallel curl calls to ensure correctness 
 ## Design Decisions
 
 The limiter uses a sliding window approach to avoid burst allowance at window boundaries, which is common in fixed window implementations.
+
 Mutex-based synchronization was chosen for simplicity and correctness under concurrent access.
 
-Concurrent requests were tested using parallel curl calls to ensure correctness under simultaneous access.
+An in-memory store was used to keep the implementation simple and focused on core logic.
 
 ---
 
@@ -35,16 +36,6 @@ This ensures that rate limiting remains accurate even under concurrent requests.
 
 ---
 
-## Design Decisions
-
-The limiter uses a sliding window approach to avoid burst allowance at window boundaries, which is common in fixed window implementations.
-
-Mutex-based synchronization was chosen for simplicity and correctness under concurrent access.
-
-An in-memory store was used to keep the implementation simple and focused on core logic.
-
----
-
 ## Steps to run
 
 Prerequisites:
@@ -54,26 +45,33 @@ Run the server:
 
 ```bash
 go run cmd/server/main.go
+```
 The server will start on:
 http://localhost:8080
 
 ## Testing the APIs
 
 Send request
+```bash
 curl -X POST http://localhost:8080/request \
 -H "Content-Type: application/json" \
 -d '{"user_id":"user1","payload":"test"}'
+```
 
 Get stats
+```bash
 curl http://localhost:8080/stats
+```
 
 Concurrency test
+```bash
 for i in {1..10}; do 
   curl -X POST http://localhost:8080/request \
   -H "Content-Type: application/json" \
   -d '{"user_id":"user1","payload":"x"}' &
 done
 wait
+```
 
 ## Limitations
 
